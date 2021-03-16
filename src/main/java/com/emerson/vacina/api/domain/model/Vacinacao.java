@@ -1,86 +1,80 @@
-package com.emerson.vacina.api.model;
+package com.emerson.vacina.api.domain.model;
 
 import java.time.LocalDate;
 
-import javax.annotation.Generated;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.sun.istack.NotNull;
 
 @Entity
-public class Usuario {
+public class Vacinacao{
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@NotBlank
-	private String cpf;
-	@NotBlank
-	private String email;
-	@NotBlank
 	private String nome;
-	
-	@NotBlank
 	@JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "dd-MM-yyyy")
-	private LocalDate dataNascimento;
+	private LocalDate dataVacinacao;	
 	
+	private String email;
+	@NotNull
+	@ManyToOne
+	@JoinColumn(name="id_usuario", referencedColumnName = "id")
+	private Usuario usuario;
 	
-	public Usuario() {
+	public Vacinacao() {
 		super();
 	}
 	
-	public Usuario(Long id, @NotBlank String cpf, @NotBlank String email, @NotBlank String nome,
-			@NotBlank LocalDate dataNascimento) {
+
+	public Vacinacao(Long id, @NotBlank String nome, LocalDate dataVacinacao, String email, Usuario usuario) {
 		super();
 		this.id = id;
-		this.cpf = cpf;
-		this.email = email;
 		this.nome = nome;
-		this.dataNascimento = dataNascimento;
+		this.dataVacinacao = dataVacinacao;
+		this.email = email;
+		this.usuario = usuario;
 	}
 
 	public Long getId() {
 		return id;
 	}
-
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-	public String getCpf() {
-		return cpf;
+	public String getNome() {
+		return nome;
 	}
-
-	public void setCpf(String cpf) {
-		this.cpf = cpf;
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
-
+	public LocalDate getDataVacinacao() {
+		return dataVacinacao;
+	}
+	public void setDataVacinacao(LocalDate dataVacinacao) {
+		this.dataVacinacao = dataVacinacao;
+	}
+	public Usuario getUsuario() {
+		return usuario;
+	}
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
 	public String getEmail() {
 		return email;
 	}
-
 	public void setEmail(String email) {
 		this.email = email;
 	}
 
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public LocalDate getDataNascimento() {
-		return dataNascimento;
-	}
-
-	public void setDataNascimento(LocalDate dataNascimento) {
-		this.dataNascimento = dataNascimento;
-	}
 
 	@Override
 	public int hashCode() {
@@ -89,7 +83,6 @@ public class Usuario {
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
-
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -98,7 +91,7 @@ public class Usuario {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Usuario other = (Usuario) obj;
+		Vacinacao other = (Vacinacao) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
